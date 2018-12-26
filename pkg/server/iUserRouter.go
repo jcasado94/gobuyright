@@ -3,8 +3,9 @@ package server
 import (
 	"encoding/json"
 	"errors"
-	"gobuyright/pkg/entity"
 	"net/http"
+
+	"github.com/jcasado94/gobuyright/pkg/entity"
 
 	"github.com/gorilla/mux"
 )

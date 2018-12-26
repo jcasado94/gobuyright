@@ -1,7 +1,7 @@
 package model
 
 import (
-	"gobuyright/pkg/entity"
+	"github.com/jcasado94/gobuyright/pkg/entity"
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"

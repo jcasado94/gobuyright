@@ -1,12 +1,13 @@
 package mongo_test
 
 import (
-	"gobuyright/pkg/entity"
-	"gobuyright/pkg/mongo"
-	"gobuyright/pkg/mongo/service"
 	"log"
 	"reflect"
 	"testing"
+
+	"github.com/jcasado94/gobuyright/pkg/entity"
+	"github.com/jcasado94/gobuyright/pkg/mongo"
+	"github.com/jcasado94/gobuyright/pkg/mongo/service"
 )
 
 const (

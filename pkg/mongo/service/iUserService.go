@@ -1,9 +1,9 @@
 package service
 
 import (
-	"gobuyright/pkg/entity"
-	"gobuyright/pkg/mongo"
-	"gobuyright/pkg/mongo/model"
+	"github.com/jcasado94/gobuyright/pkg/entity"
+	"github.com/jcasado94/gobuyright/pkg/mongo"
+	"github.com/jcasado94/gobuyright/pkg/mongo/model"
 
 	"gopkg.in/mgo.v2/bson"
 

@@ -1,10 +1,11 @@
 package server
 
 import (
-	"gobuyright/pkg/entity"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/jcasado94/gobuyright/pkg/entity"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"

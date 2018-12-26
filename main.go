@@ -1,10 +1,11 @@
 package main
 
 import (
-	"gobuyright/pkg/mongo"
-	"gobuyright/pkg/mongo/service"
-	"gobuyright/pkg/server"
 	"log"
+
+	"github.com/jcasado94/gobuyright/pkg/mongo"
+	"github.com/jcasado94/gobuyright/pkg/mongo/service"
+	"github.com/jcasado94/gobuyright/pkg/server"
 )
 
 func main() {
