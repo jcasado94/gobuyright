@@ -13,7 +13,7 @@ type IUserModel struct {
 	Username string
 }
 
-// IUserModelIndex constructs the mgo.Index for userModel
+// IUserModelIndex constructs the mgo.Index for userModel.
 func IUserModelIndex() mgo.Index {
 	return mgo.Index{
 		Key:        []string{"username"},
