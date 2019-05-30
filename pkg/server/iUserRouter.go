@@ -14,9 +14,9 @@ type iUserRouter struct {
 	iUserService entity.IUserService
 }
 
-// NewIUserRouter creates a new iUserRouter with the provided Service and Router.
-func NewIUserRouter(u entity.IUserService, router *mux.Router) *mux.Router {
-	userRouter := iUserRouter{u}
+// NewIUserRouter adds an iUserRouter configuration to router.
+func NewIUserRouter(s entity.IUserService, router *mux.Router) *mux.Router {
+	userRouter := iUserRouter{s}
 
 	router.HandleFunc("/", userRouter.createUserHandler).Methods("PUT")
 	router.HandleFunc("/{username}", userRouter.getUserHandler).Methods("GET")

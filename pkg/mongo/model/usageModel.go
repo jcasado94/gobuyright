@@ -9,15 +9,14 @@ import (
 
 // UsageModel is the DB model for entity.Usage.
 type UsageModel struct {
-	ID        bson.ObjectId `bson:"_id,omitempty"`
-	UsageID   string
-	UsageName string
+	ID   bson.ObjectId `bson:"_id,omitempty"`
+	Name string        `bson:"name"`
 }
 
 // UsageModelIndex constructs the mgo.Index for usageModel
 func UsageModelIndex() mgo.Index {
 	return mgo.Index{
-		Key:        []string{"usageID"},
+		Key:        []string{"ID"},
 		Unique:     true,
 		DropDups:   true,
 		Background: true,
@@ -28,16 +27,14 @@ func UsageModelIndex() mgo.Index {
 // NewUsageModel creates a new UsageModel given a Usage.
 func NewUsageModel(u *entity.Usage) *UsageModel {
 	return &UsageModel{
-		UsageID:   u.UsageID,
-		UsageName: u.UsageName,
+		Name: u.Name,
 	}
 }
 
 // ToUsage creates an Usage from the UsageModel.
 func (um *UsageModel) ToUsage() *entity.Usage {
 	return &entity.Usage{
-		ID:        um.ID.Hex(),
-		UsageID:   um.UsageID,
-		UsageName: um.UsageName,
+		ID:   um.ID.Hex(),
+		Name: um.Name,
 	}
 }
