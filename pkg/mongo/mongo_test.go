@@ -19,7 +19,6 @@ const (
 func TestServices(t *testing.T) {
 	t.Run("IUserService", iUserService)
 	t.Run("UsageService", usageService)
-	t.Run("TagService", tagService)
 	t.Run("UsageSelectionService", usageSelectionService)
 }
 
@@ -60,42 +59,7 @@ func createIUser_should_insert_user_into_mongo(t *testing.T) {
 }
 
 func usageService(t *testing.T) {
-	t.Run("CreateUsage", createUsage_should_insert_usage_into_mongo)
 	t.Run("GetAllUsages", getAllUsages_should_return_all_usages_in_mongo)
-}
-
-func createUsage_should_insert_usage_into_mongo(t *testing.T) {
-	session := connect()
-	defer finishTest(session)
-	usageService := service.NewUsageService(session.Copy(), dbName, collectionName)
-
-	testId, testUsageID, testUsageName := "1111", "this_usageID", "this_usageName"
-	usage := entity.Usage{
-		ID:        testId,
-		UsageID:   testUsageID,
-		UsageName: testUsageName,
-	}
-
-	err := usageService.CreateUsage(&usage)
-	if err != nil {
-		t.Errorf("Unable to create usage: %s", err)
-	}
-
-	results := make([]entity.Usage, 0)
-	session.GetCollection(dbName, collectionName).Find(nil).All(&results)
-
-	count := len(results)
-	if count != 1 {
-		t.Errorf("Incorrect number of results. Expecting 1, got %d", count)
-	}
-
-	if results[0].UsageID != usage.UsageID {
-		t.Errorf("Wrong usageID. Expected %s, got %s", testUsageID, results[0].UsageID)
-	}
-	if results[0].UsageName != usage.UsageName {
-		t.Errorf("Wrong UsageName. Expected %s, got %s", testUsageName, results[0].UsageName)
-	}
-
 }
 
 func getAllUsages_should_return_all_usages_in_mongo(t *testing.T) {
@@ -111,17 +75,15 @@ func getAllUsages_should_return_all_usages_in_mongo(t *testing.T) {
 		t.Errorf("Retrieved wrong number of usages. Expected %d, but got %d", 0, len(usages))
 	}
 
-	testId1, testUsageID1, testUsageName1 := "1", "this_usageID1", "this_usageName1"
-	testId2, testUsageID2, testUsageName2 := "2", "this_usageID2", "this_usageName2"
+	testId1, testUsageName1 := "1", "this_usageName1"
+	testId2, testUsageName2 := "2", "this_usageName2"
 	usage1 := &entity.Usage{
-		ID:        testId1,
-		UsageID:   testUsageID1,
-		UsageName: testUsageName1,
+		ID:   testId1,
+		Name: testUsageName1,
 	}
 	usage2 := &entity.Usage{
-		ID:        testId2,
-		UsageID:   testUsageID2,
-		UsageName: testUsageName2,
+		ID:   testId2,
+		Name: testUsageName2,
 	}
 	usageService.CreateUsage(usage1)
 	usageService.CreateUsage(usage2)
@@ -133,49 +95,11 @@ func getAllUsages_should_return_all_usages_in_mongo(t *testing.T) {
 	if len(usages) != 2 {
 		t.Errorf("Retrieved wrong number of usages. Expected %d, but got %d", 0, len(usages))
 	}
-	if usages[0].UsageID != testUsageID1 {
-		t.Errorf("Wrong usage retrieved. Expected id %s, but got id %s", testUsageID1, usages[0].UsageID)
+	if usages[0].Name != testUsageName1 {
+		t.Errorf("Wrong usage retrieved. Expected %s, but got %s", testUsageName1, usages[0].Name)
 	}
-	if usages[1].UsageID != testUsageID2 {
-		t.Errorf("Wrong usage retrieved. Expected id %s, but got id %s", testUsageID2, usages[1].UsageID)
-	}
-
-}
-
-func tagService(t *testing.T) {
-	t.Run("CreateTag", createTag_should_insert_tag_into_mongo)
-}
-
-func createTag_should_insert_tag_into_mongo(t *testing.T) {
-	session := connect()
-	defer finishTest(session)
-	tagService := service.NewTagService(session.Copy(), dbName, collectionName)
-
-	testId, testTagID, testTagName := "1111", "this_tagID", "this_tagName"
-	tag := entity.Tag{
-		ID:      testId,
-		TagID:   testTagID,
-		TagName: testTagName,
-	}
-
-	err := tagService.CreateTag(&tag)
-	if err != nil {
-		t.Errorf("Unable to create tag: %s", err)
-	}
-
-	results := make([]entity.Tag, 0)
-	session.GetCollection(dbName, collectionName).Find(nil).All(&results)
-
-	count := len(results)
-	if count != 1 {
-		t.Errorf("Incorrect number of results. Expecting 1, got %d", count)
-	}
-
-	if results[0].TagID != tag.TagID {
-		t.Errorf("Wrong tagID. Expected %s, got %s", testTagID, results[0].TagID)
-	}
-	if results[0].TagName != tag.TagName {
-		t.Errorf("Wrong tagName. Expected %s, got %s", testTagName, results[0].TagID)
+	if usages[1].Name != testUsageName2 {
+		t.Errorf("Wrong usage retrieved. Expected %s, but got %s", testUsageName2, usages[1].Name)
 	}
 
 }
@@ -264,6 +188,54 @@ func getByUsernameAndTags_should_retrieve_the_right_UsageSelection(t *testing.T)
 	}
 	if !reflect.DeepEqual(*result2, usageSelection1) {
 		t.Errorf("First query failed. Queried [%s, [%s, %s]], obtained %v", "user1", "tag1", "tag2", result2)
+	}
+
+}
+
+func itemService(t *testing.T) {
+	t.Run("GetAllItems", getAllItems_should_return_all_items_in_mongo)
+}
+
+func getAllItems_should_return_all_items_in_mongo(t *testing.T) {
+	session := connect()
+	defer finishTest(session)
+	itemService := service.NewItemService(session.Copy(), dbName, collectionName)
+
+	items, err := itemService.GetAllItems()
+	if err != nil {
+		t.Error("Coulddd not retrieve items.")
+	}
+	if len(items) != 0 {
+		t.Errorf("Retrieved wrong number of items. Expected %d, but got %d", 0, len(items))
+	}
+
+	testId1, testItemName1, testItemImg1 := "1", "itemName1", "http://google.com/kewtImg.jpg"
+	testId2, testItemName2, testItemImg2 := "2", "itemName2", "http://google.com/kewtImg.jpg"
+	item1 := &entity.Item{
+		ID:   testId1,
+		Name: testItemName1,
+		Img:  testItemImg1,
+	}
+	item2 := &entity.Item{
+		ID:   testId2,
+		Name: testItemName1,
+		Img:  testItemImg2,
+	}
+	itemService.CreateItem(item1)
+	itemService.CreateItem(item2)
+
+	items, err = itemService.GetAllItems()
+	if err != nil {
+		t.Error("Could not retreive items.")
+	}
+	if len(items) != 2 {
+		t.Errorf("Retrieved wrong number of items. Expected %d, but got %d", 0, len(items))
+	}
+	if items[0].Name != testItemName1 {
+		t.Errorf("Wrong usage retrieved. Expected %s, but got %s", testItemName1, items[0].Name)
+	}
+	if items[1].Name != testItemName2 {
+		t.Errorf("Wrong usage retrieved. Expected %s, but got %s", testItemName2, items[1].Name)
 	}
 
 }

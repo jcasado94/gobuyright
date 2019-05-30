@@ -18,6 +18,8 @@ func main() {
 	s := server.NewServer(
 		service.NewIUserService(ms.Copy(), "buyright", "iuser"),
 		service.NewUsageSelectionService(ms.Copy(), "buyright", "usageselection"),
+		service.NewUsageService(ms.Copy(), "buyright", "usage"),
+		service.NewItemService(ms.Copy(), "buyright", "item"),
 	)
 
 	s.Start()

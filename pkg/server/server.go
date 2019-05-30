@@ -17,10 +17,12 @@ type Server struct {
 }
 
 // NewServer creates a new server given the needed Services.
-func NewServer(iuserService entity.IUserService, usService entity.UsageSelectionService) *Server {
+func NewServer(iuserService entity.IUserService, usService entity.UsageSelectionService, usageService entity.UsageService, itemService entity.ItemService) *Server {
 	s := Server{router: mux.NewRouter()}
 	NewIUserRouter(iuserService, s.newSubrouter("/iuser"))
 	NewUsageSelectionRouter(usService, s.newSubrouter("/usageselection"))
+	NewUsageRouter(usageService, s.newSubrouter("/usage"))
+	NewItemRouter(itemService, s.newSubrouter("/item"))
 	return &s
 }
 

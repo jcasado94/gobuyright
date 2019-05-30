@@ -30,7 +30,7 @@ func (us *UsageService) CreateUsage(u *entity.Usage) error {
 // GetByUsageID retrieves the Usage with ID usageID from the collection.
 func (us *UsageService) GetByUsageID(usageID string) (*entity.Usage, error) {
 	um := model.UsageModel{}
-	err := us.collection.Find(bson.M{"usageID": usageID}).One(&um)
+	err := us.collection.Find(bson.M{"_id": usageID}).One(&um)
 	if err != nil {
 		return nil, err
 	}
